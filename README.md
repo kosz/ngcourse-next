@@ -1,11 +1,17 @@
 # Angular Course from rangle.io
 
+THIS IS WORK IN PROGRESS.
+
 This repository contains handout materials and code for rangle.io's AngularJS
-training course. This is meant to be used as a part of the course, which is
+training course, focusing on building Angular 1.x applications the Angular 2 way.
+
+This is meant to be used as a part of the course, which is
 normally offered as a 2-3 day event. See [http://rangle.io/javascript-training.html](http://rangle.io/javascript-training.html) for more
 information.
 
 ## The Handouts
+
+THE HANDOUTS ARE YET TO BE UPDATED TO MATCH THE CHANGES TO THE CODE.
 
 See the [handout](https://github.com/rangle/ngcourse/tree/master/handout) for
 the handout. You can either view it in your browser or build it into a PDF
@@ -32,9 +38,13 @@ You will then need to use `bower` to install the dependencies:
   bower install
 ```
 
-To access the front-end of the project, run a simple server such as `http-
-server` with client as the root directory. You will need to install bower and
-run
+You will then need to build the front end using:
+
+```bash
+  gulp build
+```
+
+Once you've done that, you can access the front-end of the project, by running a simple server such as `http-server` with client as the root directory. You will need to install bower and run
 
 ```bash
   sudo npm install -g http-server # skip "sudo" on windows
@@ -47,5 +57,3 @@ Then point your browser to http://localhost:3000/
 
 If you see a login screen, you are all set. You can login as "alice" with
 password "x", at which point you should see a list of tasks.
-
-
