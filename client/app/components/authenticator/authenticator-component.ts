@@ -1,7 +1,7 @@
 import {Inject, getServices} from 'utils/di';
 import {makeComponent} from 'utils/component-maker';
 
-let template = `
+const template = `
   <div>
     <ngc-login-form
       ng-hide="ctrl.user.isAuthenticated"
@@ -31,10 +31,10 @@ class AuthenticatorCtrl {
     this.user = this.services.koast.user;
     this.services.koast.user.whenAuthenticated()
         .then(() => this.services.users.whenReady())
-        .then(function() {
-        this.userDisplayName = this.services.users.getUserDisplayName(
+        .then(() => {
+          this.userDisplayName = this.services.users.getUserDisplayName(
             this.services.koast.user.data.username);
-        }.bind(this))
+        })
         .then(null, this.services.$log.error);
   }
 
