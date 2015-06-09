@@ -5,6 +5,9 @@
   "main": "server/app.js",
   "author": "Yuri Takhteyev <yuri@rangle.io>",
   "license": "MIT",
+  "scripts": {
+    "test": "gulp karma"
+  },
   "dependencies": {
     "gulp": "^3.8.8"
   },
@@ -39,6 +42,7 @@
     "supertest": "^0.15.0",
     "supertest-as-promised": "^1.0.0",
     "systemjs-builder": "^0.10.6",
+    "tsd": "^0.6.1",
     "typescript": "1.5.0-beta"
   }
 }
