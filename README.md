@@ -27,9 +27,7 @@ run the front end, however. Instead, you can access the API server deployed to
 http://ngcourse.herokuapp.com/ and will develop the client-side code on your
 own machine.
 
-The students should start by checking out branch "base", which has all the
-necessary configurations but no actual client side code. The "master" branch
-contains the final state of the project.
+The students should start by checking out the "base" branch for their session, which has all the necessary configurations but no actual client side code. The "master" branch contains the final state of the project.
 
 You will then need to use `bower` to install the dependencies:
 
@@ -41,6 +39,7 @@ You will then need to use `bower` to install the dependencies:
 You will then need to build the front end using:
 
 ```bash
+  npm install
   gulp build
 ```
 
