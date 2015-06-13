@@ -16,16 +16,7 @@ var ts = require('gulp-typescript');
 var sourcemaps = require('gulp-sourcemaps');
 
 var karmaFiles = [
-  'client/bower_components/angular/angular.js',
-  'client/bower_components/angular-mocks/angular-mocks.js',
-  'client/bower_components/sinon-chai/lib/sinon-chai.js',
-  'client/bower_components/koast-angular/dist/koast.js',
-  'client/bower_components/angular-ui-router/release/angular-ui-router.js',
-  'client/testing/lib/q.js',
-  'client/testing/test-utils.js',
-  'client/bower_components/lodash/dist/lodash.js',
-  'client/app/**/*.html',
-  'client/app/**/*.js'
+  
 ];
 
 var clientFiles = 'client/app/**/*.js';
@@ -50,7 +41,7 @@ gulp.task('beautify',  function () {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('karma', function() {
+gulp.task('karma',['build'], function() {
   return gulp.src(karmaFiles)
     .pipe(karma({
       configFile: 'karma.conf.js',
@@ -60,16 +51,17 @@ gulp.task('karma', function() {
       throw err;
     });
 });
-
-gulp.task('karma-watch', function() {
-  return gulp.src(karmaFiles)
+ 
+gulp.task('start-karma-watcher',function(){
+  gulp.src(karmaFiles)
     .pipe(karma({
       configFile: 'karma.conf.js',
       action: 'watch'
-    }))
-    .on('error', function(err) {
-      throw err;
-    });
+    }));
+});
+
+gulp.task('karma-watch',['start-karma-watcher'], function() {
+  return gulp.watch('./client/**/*.ts', ['build']);
 });
 
 gulp.task('api-test', function() {
@@ -108,7 +100,11 @@ gulp.task('build', function () {
         module: 'amd',
         target: 'ES5',
         noImplicitAny: false
-      }))
+      })
+      .on('error', function(err) {
+      throw err;
+    })
+      )
     // .pipe(concat('ngcourse.js'))
     // .pipe(gulp.dest(destinationFolder))
     // .pipe(rename('ngcourse.min.js'))
@@ -124,4 +120,4 @@ gulp.task('watch', function() {
   return gulp.watch('./client/**/*.js', ['lint']);
 });
 
-gulp.task('default', ['lint', 'build', 'karma']);
+gulp.task('default', ['lint', 'karma']);
