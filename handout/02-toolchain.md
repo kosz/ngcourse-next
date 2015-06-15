@@ -92,9 +92,11 @@ Before we proceed, get the code from Git if you have not done so:
 Now, switch to the branch that we'll be using for today's course:
 
 ```bash
-  git branch --track 2015-02-18 origin/2015-02-18
-  git checkout 2015-02-18
+  git branch --track YYYY-DD-MM origin/YYYY-DD-MM
+  git checkout YYYY-DD-MM
 ```
+
+**Replace "YYYY-DD-MM" above with the start date of the course, e.g., "2015-06-17".**
 
 This gives us a hollowed-out version of the application we'll be building.
 

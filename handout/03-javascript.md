@@ -1,4 +1,4 @@
-# Part 3: JavaScript for AngularJS Developers
+# Part 3: EcmaScript 5 for AngularJS Developers
 
 JavaScript is an untyped, interpreted programming language that can accomodate
 a variety of  programming paradigms. Among other things, a lot of modern
