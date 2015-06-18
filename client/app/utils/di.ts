@@ -17,12 +17,12 @@ export function getServices(annottee, args) {
 export function InjectIntoClass(injectables: any) {
   return function(target: any) {
     target.$inject = injectables;
-  }
+  };
 }
 
 export function Inject(injectable) {
   return function(prototype, method, argumentPosition) {
     prototype.$inject = prototype.$inject || [];
     prototype.$inject[argumentPosition] = injectable;
-  }
+  };
 }

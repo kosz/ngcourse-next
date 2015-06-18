@@ -43,6 +43,12 @@ You will then need to build the front end using:
   gulp build
 ```
 
+You will also need to install TypeScript definition files specified in tsd.json at the root of the project
+
+```
+tsd reinstall -s
+```
+
 Once you've done that, you can access the front-end of the project, by running a simple server such as `http-server` with client as the root directory. You will need to install bower and run
 
 ```bash

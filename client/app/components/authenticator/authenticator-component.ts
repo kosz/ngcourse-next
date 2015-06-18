@@ -1,8 +1,13 @@
-import {Inject, getServices} from 'utils/di';
-import {makeComponent} from 'utils/component-maker';
+import {Inject} from 'utils/di';
 
-const template = `
-  <div>
+class AuthenticatorComponent {
+  
+  private static selector = 'ngc-authenticator';
+  private static options = {
+    transclude: true
+  };
+  private static template = `
+    <div>
     <ngc-login-form
       ng-hide="ctrl.user.isAuthenticated"
       on-submit="ctrl.login(data)"
@@ -14,51 +19,40 @@ const template = `
       <hr>
       <ng-transclude></ng-transclude>
     </div>
-`;
-
-class AuthenticatorCtrl {
-  services: any;
-  user: any;
-  userDisplayName: any;
-  errorMessage: any;
+  `;
+  
+  private user: any;
+  private userDisplayName: any;
+  private errorMessage: any;
 
   constructor(
-    @Inject('$log') $log,
-    @Inject('users') users,
-    @Inject('koast') koast
+    @Inject('$log') private $log,
+    @Inject('users') private users,
+    @Inject('koast') private koast
   ) {
-    this.services = {$log, users, koast};
-    this.user = this.services.koast.user;
-    this.services.koast.user.whenAuthenticated()
-        .then(() => this.services.users.whenReady())
+    this.user = this.koast.user;
+    this.koast.user.whenAuthenticated()
+        .then(() => this.users.whenReady())
         .then(() => {
-          this.userDisplayName = this.services.users.getUserDisplayName(
-            this.services.koast.user.data.username);
+          this.userDisplayName = this.users.getUserDisplayName(
+            this.koast.user.data.username);
         })
-        .then(null, this.services.$log.error);
+        .then(null, this.$log.error);
   }
 
   login(form) {
     console.log('form received:', form);
-    this.services.koast.user.loginLocal(form)
+    this.koast.user.loginLocal(form)
       .then(null, this.showLoginError.bind(this));
   }
 
   logout() {
-    this.services.koast.user.logout()
-      .then(null, this.services.$log.error);
+    this.koast.user.logout()
+      .then(null, this.$log.error);
   }
 
   showLoginError(errorMessage) {
     this.errorMessage = 'Login failed.';
-    this.services.$log.error(errorMessage);
+    this.$log.error(errorMessage);
   }
 }
-
-export var AuthenticatorComponent = makeComponent(
-  template,
-  AuthenticatorCtrl,
-  {
-    transclude: true
-  }
-);
