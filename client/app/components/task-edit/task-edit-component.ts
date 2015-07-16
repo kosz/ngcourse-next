@@ -14,22 +14,20 @@ export class TaskEditComponent {
   private task;
 
   constructor(
-    @Inject('$http') private $http,
     @Inject('$log') private $log,
-    @Inject('tasks') private tasks,
+    @Inject('tasksActions') private tasksActions,
+    @Inject('tasksStore') private tasksStore,
     @Inject('$stateParams') private $stateParams,
     @Inject('router') private router
   ) {
 
-    this.tasks.getTask(this.$stateParams._id)
-      .then((response) => this.task = response)
-      .then(null, this.$log.error);
+    this.task = this.tasksStore.getTaskById(
+      this.$stateParams._id);
   }
 
   updateTask(task) {
-    this.tasks.updateTask(task)
-      .then(this.router.goToTaskList.bind(this.router))
-      .then(null, this.$log.error);
+    this.tasksActions.updateTask(task);
+    this.router.goToTaskList();
   }
   
   cancel() {

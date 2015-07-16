@@ -1,50 +1,74 @@
 /// <reference path="../../../../typings/tsd.d.ts" />
 import {Inject, getServices} from 'utils/di';
-import {TODO_ACTIONS} from 'constants/action-constants';
-import {List} from 'immutable';
+import {USER_ACTIONS} from 'constants/action-constants';
+import {List, Map, fromJS} from 'immutable';
 import 'rx';
 
 export class UsersStore {
   
-  private byUserName: any;
-  private usersPromise: any;
-  private all: any;
-
+  private usersByUsername;
+  private usersObservable;
+  
+  /* Authenticated methods */
+  private getUsers: Function;
+  
   constructor(
-    @Inject('koast') private koast,
     @Inject('$log') private $log,
-    @Inject('server') private server
+    @Inject('koast') private koast,
+    @Inject('dispatcher') private dispatcher
   ) {
-    this.byUserName = {};
-    this.loadUsers();
+    this.addAuthenticatedMethods();
+    this.setInitialState();
+    this.registerActionHandlers();
   }
-
-  private loadUsers () {
-    this.usersPromise = this.koast.user.whenAuthenticated()
-      .then(() => this.server.queryForResources('users'))
-      .then((userArray) => (
-        this.all = userArray,
-        userArray.forEach(
-          (user) => user.username && (this.byUserName[user.username] = user)
-        )
-      ))
-      .then(null, this.$log.error);
+  
+  get getUsersObservable() {
+    return this.usersObservable;
   }
-
-  public whenReady () {
-    return this.usersPromise;
+  
+  get currentUsers() {
+    return this.usersByUsername.toJS();
   }
-
-  public getUserByUsername (username) {
-    return this.byUserName[username];
+  
+  public getUserByUsername(username) {
+    return this.usersByUsername.get(username);
   }
-
-  public getUserDisplayName (username) {
-    var user = this.getUserByUsername(username);
-    if (!user) {
-      return '';
-    }
-
-    return user.displayName;
+  
+  private setInitialState() {
+    this.usersByUsername = Map();
+    this.usersObservable = new Rx.Subject();
+    this.getUsers();
+  }
+  
+  private registerActionHandlers() {
+    this.dispatcher.filter(
+      (action) => action.actionType === USER_ACTIONS.GET_USERS)
+        .subscribe(() => this.getUsers());  
+  }
+  
+  private addAuthenticatedMethods() {
+    this.getUsers = this.makeAuthenticatedMethod(
+      () => Rx.Observable.fromPromise(
+        this.koast.queryForResources('users'))
+          .subscribe(
+            (users: Array<{username: string}>) => {
+              this.usersByUsername = Map().withMutations(
+                (map) => {
+                  users.forEach(
+                    (user) => map.set(user.username, user));
+                });
+                this.usersObservable.onNext(this.usersByUsername.toJS());
+            },
+            (error) => this.usersObservable.onError(error)
+          )
+      );
+  }
+  
+  private makeAuthenticatedMethod(method) {
+    return function () {
+      let methodArgs = arguments;
+      return this.koast.user.whenAuthenticated()
+        .then(() => method.apply(this, methodArgs));
+    };
   }
 }

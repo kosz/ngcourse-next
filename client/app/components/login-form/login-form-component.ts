@@ -1,6 +1,6 @@
 import {Inject} from 'utils/di';
 
-class LoginFormComponent {
+export class LoginFormComponent {
   
   private static selector = 'ngc-login-form';
   private static options = {
@@ -49,10 +49,8 @@ class LoginFormComponent {
   }
   
   private submit() {
-    var form = {
+    this.fireSubmit({
       data: this
-    };
-    console.log('form sent:', form);
-    this.fireSubmit(form);
+    });
   }
 }

@@ -1,6 +1,7 @@
 import {Inject} from 'utils/di';
+import {AuthenticationStore} from 'stores/authentication/authentication-store';
 
-class AuthenticatorComponent {
+export class AuthenticatorComponent {
   
   private static selector = 'ngc-authenticator';
   private static options = {
@@ -14,45 +15,42 @@ class AuthenticatorComponent {
       error-message="ctrl.errorMessage">
     </ngc-login-form>
     <div ng-show="ctrl.user.isAuthenticated">
-      Hello, <span>{{ctrl.userDisplayName}}</span>!
+      Hello, <span>{{ctrl.users[ctrl.user.data.username].displayName}}</span>!
       <button ng-click="ctrl.logout()">Logout</button>
       <hr>
       <ng-transclude></ng-transclude>
     </div>
   `;
   
-  private user: any;
-  private userDisplayName: any;
-  private errorMessage: any;
+  private user;
+  private users;
+  private errorMessage;
 
   constructor(
     @Inject('$log') private $log,
-    @Inject('users') private users,
-    @Inject('koast') private koast
-  ) {
-    this.user = this.koast.user;
-    this.koast.user.whenAuthenticated()
-        .then(() => this.users.whenReady())
-        .then(() => {
-          this.userDisplayName = this.users.getUserDisplayName(
-            this.koast.user.data.username);
-        })
-        .then(null, this.$log.error);
+    @Inject('authenticationStore') private authenticationStore,
+    @Inject('authenticationActions') private authenticationActions,
+    @Inject('usersStore') private usersStore) {
+    
+    this.users = usersStore.currentUsers;
+    this.user = authenticationStore.currentUser;
+      
+    this.authenticationStore.getUserObservable
+      .subscribe(
+        (newUser) => this.user = newUser,
+        (error) => this.errorMessage = error.data);
+    
+    this.usersStore.getUsersObservable
+      .subscribe(
+        (users) => this.users = users,
+        (error) => this.errorMessage = error);
   }
 
-  login(form) {
-    console.log('form received:', form);
-    this.koast.user.loginLocal(form)
-      .then(null, this.showLoginError.bind(this));
+  private login(form) {
+    this.authenticationActions.login(form);
   }
 
-  logout() {
-    this.koast.user.logout()
-      .then(null, this.$log.error);
-  }
-
-  showLoginError(errorMessage) {
-    this.errorMessage = 'Login failed.';
-    this.$log.error(errorMessage);
+  private logout() {
+    this.authenticationActions.logout();
   }
 }
