@@ -27,4 +27,11 @@ export class TaskActions {
       task: task
     });
   }
+  
+  deleteTask(task) {
+    this.dispatcher.onNext({
+      actionType: TASK_ACTIONS.DELETE_TASK,
+      task: task
+    });
+  }
 }

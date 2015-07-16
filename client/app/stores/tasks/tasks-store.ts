@@ -13,6 +13,7 @@ export class TasksStore {
   private getTasks: Function;
   private addTask: Function;
   private updateTask: Function;
+  private deleteTask: Function;
   private getTask: Function;
 
   constructor(
@@ -59,7 +60,12 @@ export class TasksStore {
     this.dispatcher.filter(
       (action) => action.actionType === TASK_ACTIONS.UPDATE_TASK)
         .subscribe(
-          (action) => this.updateTask(action.task));    
+          (action) => this.updateTask(action.task));
+          
+    this.dispatcher.filter(
+      (action) => action.actionType === TASK_ACTIONS.DELETE_TASK)
+        .subscribe(
+          (action) => this.deleteTask(action.task)); 
   }
   
   private addAuthenticatedMethods() {
@@ -86,6 +92,11 @@ export class TasksStore {
 
     this.updateTask = this.makeAuthenticatedMethod(
       (task) => task.save()
+        .then(this.getTasks)
+    );
+    
+    this.deleteTask = this.makeAuthenticatedMethod(
+      (task) => task.delete()
         .then(this.getTasks)
     );
   }

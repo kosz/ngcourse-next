@@ -63,9 +63,7 @@ export class RouterService {
 
   $state: any;
 
-  constructor(
-    @Inject('$state') $state
-  ) {
+  constructor(@Inject('$state') $state) {
     this.$state = $state;
   }
 
