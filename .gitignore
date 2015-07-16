@@ -4,3 +4,5 @@ handout/node_modules/*
 private/
 client/bower_components/
 client/dist/
+.settings/
+typings/

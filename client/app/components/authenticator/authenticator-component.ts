@@ -1,64 +1,56 @@
-import {Inject, getServices} from 'utils/di';
-import {makeComponent} from 'utils/component-maker';
+import {Inject} from 'utils/di';
+import {AuthenticationStore} from 'stores/authentication/authentication-store';
 
-const template = `
-  <div>
+export class AuthenticatorComponent {
+  
+  private static selector = 'ngc-authenticator';
+  private static options = {
+    transclude: true
+  };
+  private static template = `
+    <div>
     <ngc-login-form
       ng-hide="ctrl.user.isAuthenticated"
       on-submit="ctrl.login(data)"
       error-message="ctrl.errorMessage">
     </ngc-login-form>
     <div ng-show="ctrl.user.isAuthenticated">
-      Hello, <span>{{ctrl.userDisplayName}}</span>!
+      Hello, <span>{{ctrl.users[ctrl.user.data.username].displayName}}</span>!
       <button ng-click="ctrl.logout()">Logout</button>
       <hr>
       <ng-transclude></ng-transclude>
     </div>
-`;
-
-class AuthenticatorCtrl {
-  services: any;
-  user: any;
-  userDisplayName: any;
-  errorMessage: any;
+  `;
+  
+  private user;
+  private users;
+  private errorMessage;
 
   constructor(
-    @Inject('$log') $log,
-    @Inject('users') users,
-    @Inject('koast') koast
-  ) {
-    this.services = {$log, users, koast};
-    this.user = this.services.koast.user;
-    this.services.koast.user.whenAuthenticated()
-        .then(() => this.services.users.whenReady())
-        .then(() => {
-          this.userDisplayName = this.services.users.getUserDisplayName(
-            this.services.koast.user.data.username);
-        })
-        .then(null, this.services.$log.error);
+    @Inject('$log') private $log,
+    @Inject('authenticationStore') private authenticationStore,
+    @Inject('authenticationActions') private authenticationActions,
+    @Inject('usersStore') private usersStore) {
+    
+    this.users = usersStore.currentUsers;
+    this.user = authenticationStore.currentUser;
+      
+    this.authenticationStore.getUserObservable
+      .subscribe(
+        (newUser) => this.user = newUser,
+        (error) => this.errorMessage = error.data);
+    
+    this.usersStore.getUsersObservable
+      .subscribe(
+        (users) => this.users = users,
+        (error) => this.errorMessage = error);
   }
 
-  login(form) {
-    console.log('form received:', form);
-    this.services.koast.user.loginLocal(form)
-      .then(null, this.showLoginError.bind(this));
+  private login(form) {
+    this.authenticationActions.login(form);
   }
 
-  logout() {
-    this.services.koast.user.logout()
-      .then(null, this.services.$log.error);
-  }
-
-  showLoginError(errorMessage) {
-    this.errorMessage = 'Login failed.';
-    this.services.$log.error(errorMessage);
+  private logout() {
+    this.authenticationActions.logout();
   }
 }
-
-export var AuthenticatorComponent = makeComponent(
-  template,
-  AuthenticatorCtrl,
-  {
-    transclude: true
-  }
-);

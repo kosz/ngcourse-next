@@ -1,60 +1,91 @@
-'use strict';
-
-import {TaskListCtrl} from 'sections/task-list/task-list-controller';
-import {TaskEditCtrl} from 'sections/task-edit/task-edit-controller';
-import {TaskAddCtrl} from 'sections/task-add/task-add-controller';
-import {TasksService} from 'core/tasks/tasks-service';
-import {UsersService} from 'core/users/users-service';
+/// <reference path="../../typings/tsd.d.ts" />
+import {TasksStore} from 'stores/tasks/tasks-store';
+import {UsersStore} from 'stores/users/users-store';
+import {AuthenticationStore} from 'stores/authentication/authentication-store';
+import {ServerService} from 'services/server/server-service';
+import {RouterService, RouterConfig} from 'services/router/router-service';
+import {TaskListComponent} from 'components/task-list/task-list-component';
+import {TaskAddComponent} from 'components/task-add/task-add-component';
+import {TaskEditComponent} from 'components/task-edit/task-edit-component';
+import {TaskComponent} from 'components/task-list/task-component';
 import {AuthenticatorComponent} from 'components/authenticator/authenticator-component';
-import {configureRouter, RouterService} from 'core/router/router-service';
 import {LoginFormComponent} from 'components/login-form/login-form-component';
-declare var angular: any;
+import {TaskActions} from 'actions/task/task-actions';
+import {UserActions} from 'actions/user/user-actions';
+import {AuthenticationActions} from 'actions/authentication/authentication-actions';
+import {makeDirective, makeSelector} from 'utils/component-utils';
+
+import 'angular';
+import 'rx';
+import 'angular-ui-router';
+import 'koast';
+import 'lodash';
 
 angular.module('ngcourse.router', ['ui.router'])
-  .config(configureRouter)
+  .config(RouterConfig)
   .service('router', RouterService);
 
-angular.module('ngcourse.tasks', ['koast']).service('tasks', TasksService);
-angular.module('ngcourse.users', ['koast']).service('users', UsersService);
+angular.module('ngcourse.authentication', [])
+  .service('authenticationStore', AuthenticationStore)
+  .service('authenticationActions', AuthenticationActions);
+  
+angular.module('ngcourse.tasks', [])
+  .service('tasksStore', TasksStore)
+  .service('tasksActions', TaskActions);
+  
+angular.module('ngcourse.users', [])
+  .service('usersStore', UsersStore)
+  .service('usersActions', UserActions);
+
+angular.module('ngcourse.server', [])
+  .service('server', ServerService);
+  
+angular.module('ngcourse.dispatcher', [])
+  .service('dispatcher', Rx.Subject);
 
 angular.module('ngcourse', [
+  'ngcourse.authentication',
   'ngcourse.tasks',
   'ngcourse.users',
+  'ngcourse.server',
   'ngcourse.router',
-  'koast'
-  // ,
-  // 'ngcourse-example-directives'
-]);
-
-angular.module('ngcourse')
-
-
-.directive('ngcLoginForm', LoginFormComponent)
-
-.controller('TaskListCtrl', TaskListCtrl)
-.controller('TaskEditCtrl', TaskEditCtrl)
-.controller('TaskAddCtrl', TaskAddCtrl)
-
-.controller('LoginFormCtrl', function() { })
-.directive('ngcAuthenticator', AuthenticatorComponent)
-
-// .constant('API_BASE_URL', 'http://localhost:7000')
-.constant('API_BASE_URL', 'http://ngcourse.herokuapp.com')
-
-.run(function ($log, koast, API_BASE_URL) {
-  $log.info('All ready!');
-
-  koast.init({
-    baseUrl: API_BASE_URL
+  'ngcourse.dispatcher',
+  'koast'])
+  
+  .directive(
+    makeSelector(AuthenticatorComponent), 
+    makeDirective(AuthenticatorComponent))
+  .directive(
+    makeSelector(LoginFormComponent), 
+    makeDirective(LoginFormComponent))
+  .directive(
+    makeSelector(TaskListComponent), 
+    makeDirective(TaskListComponent))
+  .directive(
+    makeSelector(TaskComponent), 
+    makeDirective(TaskComponent))
+  .directive(
+    makeSelector(TaskAddComponent), 
+    makeDirective(TaskAddComponent))
+  .directive(
+    makeSelector(TaskEditComponent), 
+    makeDirective(TaskEditComponent))
+  
+  .constant('API_BASE_URL', 'http://ngcourse.herokuapp.com')
+  .run(function ($log, koast, API_BASE_URL) {
+    $log.info('All ready!');
+  
+    koast.init({
+      baseUrl: API_BASE_URL
+    });
+    koast.setApiUriPrefix('/api/v2/');
+    koast.addEndpoint('tasks', ':_id', {
+      useEnvelope: true
+    });
+    koast.addEndpoint('users', ':_id', {
+      useEnvelope: true
+    });
   });
-  koast.setApiUriPrefix('/api/v2/');
-  koast.addEndpoint('tasks', ':_id', {
-    useEnvelope: true
-  });
-  koast.addEndpoint('users', ':_id', {
-    useEnvelope: true
-  });
-});
 
 angular.element(document).ready(function() {
   angular.bootstrap(document, ['ngcourse']);

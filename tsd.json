@@ -13,6 +13,69 @@
     },
     "es6-promise/es6-promise.d.ts": {
       "commit": "43861a1703feb7c6c413a4026a262c2ecb97eec0"
+    },
+    "angularjs/angular.d.ts": {
+      "commit": "ab3cc82066805007cbf0db233ddb5879f42be4d2"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "ab3cc82066805007cbf0db233ddb5879f42be4d2"
+    },
+    "rx/rx.all.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.binding.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.aggregates.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.async-lite.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.coincidence-lite.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.backpressure.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.lite.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.backpressure-lite.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.async.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.testing.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.coincidence.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.binding-lite.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.virtualtime.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.time.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.time-lite.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.joinpatterns.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.experimental.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+    },
+    "rx/rx-lite.d.ts": {
+      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
     }
   }
 }
