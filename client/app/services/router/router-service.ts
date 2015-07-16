@@ -22,7 +22,7 @@ export class RouterConfig {
         url: '/tasks',
         views: {
           'actionArea@tasks': {
-            template: '<button ui-sref="tasks.add">Add task</button>'
+            template: ''
           },
           '': {
             template: '<ngc-tasks></ngc-tasks>'
