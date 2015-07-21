@@ -8,14 +8,11 @@ import 'rx';
 export class TaskListComponent {
 
   private static selector = 'ngc-tasks';
-  private static options = {
-    replace: true
-  };
+  private static options = {};
   private static template = `
     <div>
 
       <div class="mt4 mb4" ui-view="actionArea"></div>
-
       <header class="flex mb4 header">
         <i class="h1 fa fa-bullseye fa-5x mr2 blue"></i>
         <div class="flex-auto">
@@ -89,21 +86,12 @@ export class TaskListComponent {
         );
   }
 
+  private addTask(task) {
+    this.tasksActions.addTask(task);
+    this.router.goToTaskList();  
+  }
+  
   private goToAddTask() {
     this.router.goToAddTask.bind(this.router);
   }
 };
-
-        // <ngc-task
-        //   ng-repeat="task in ctrl.tasks"
-        //   task="task"
-        //   display-name="ctrl.usersByUsername[task.owner].displayName">
-        // </ngc-task>
-
-
-        // <tr ng-repeat="task in ctrl.tasks">
-        //   <td>{{ctrl.usersByUsername[task.owner].displayName}}</td>
-        //   <td>{{task.description}}</td>
-        //   <td><a ng-show="task.can.edit" ui-sref="tasks.details({_id: task._id})">edit</a>
-        //   </td>
-        // </tr>

@@ -7,7 +7,7 @@ import {RouterService, RouterConfig} from 'services/router/router-service';
 import {TaskListComponent} from 'components/task-list/task-list-component';
 import {TaskAddComponent} from 'components/task-add/task-add-component';
 import {TaskEditComponent} from 'components/task-edit/task-edit-component';
-import {TaskComponent} from 'components/task-list/task-component';
+import {TaskComponent} from 'components/task/task-component';
 import {AuthenticatorComponent} from 'components/authenticator/authenticator-component';
 import {LoginFormComponent} from 'components/login-form/login-form-component';
 import {TaskActions} from 'actions/task/task-actions';
