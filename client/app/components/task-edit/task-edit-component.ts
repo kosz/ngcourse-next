@@ -1,4 +1,5 @@
 import {Inject} from 'utils/di';
+import 'rx';
 
 export class TaskEditComponent {
 
@@ -7,6 +8,7 @@ export class TaskEditComponent {
   private static options = {};
 
   private task;
+  private errorMessage;
 
   constructor(
     @Inject('$log') private $log,
@@ -16,8 +18,15 @@ export class TaskEditComponent {
     @Inject('router') private router
   ) {
 
-    this.task = this.tasksStore.getTaskById(
-      this.$stateParams._id);
+    let taskId = this.$stateParams._id;
+     
+    this.task = this.tasksStore.getTaskById(taskId);
+      
+    this.tasksStore.getTasksObservable
+      .subscribe(
+        (tasks) => this.task = this.tasksStore.getTaskById(taskId),
+        (error) => this.errorMessage = error
+      );
   }
 
   updateTask(task) {
