@@ -21,9 +21,6 @@ export class RouterConfig {
       .state('tasks', {
         url: '/tasks',
         views: {
-          'actionArea@tasks': {
-            template: ''
-          },
           '': {
             template: '<ngc-tasks></ngc-tasks>'
           }

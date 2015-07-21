@@ -5,7 +5,7 @@ export class LoginFormComponent {
   private static selector = 'ngc-login-form';
   private static templateUrl = '/dist/components/login-form/login-form-component.html';
   private static options = {
-    scope: {
+    bindToController: {
       errorMessage: '=',
       fireSubmit: '&onSubmit'
     }

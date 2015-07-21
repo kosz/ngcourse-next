@@ -9,7 +9,7 @@ export class TaskComponent {
   private static selector = 'ngc-task';
   private static templateUrl = '/dist/components/task/task-component.html';
   private static options = {
-    scope: {
+    bindToController: {
       task: '=',
       user: '='
     }
@@ -24,7 +24,6 @@ export class TaskComponent {
     @Inject('router') private router,
     @Inject('tasksActions') private tasksActions
     ) {
-    this.$log.log('task-component');
   }
   
   private deleteTask() {
