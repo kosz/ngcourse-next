@@ -8,46 +8,8 @@ import 'rx';
 export class TaskListComponent {
 
   private static selector = 'ngc-tasks';
+  private static templateUrl = '/dist/components/task-list/task-list-component.html';
   private static options = {};
-  private static template = `
-    <div>
-
-      <div class="mt4 mb4" ui-view="actionArea"></div>
-      <header class="flex mb4 header">
-        <i class="h1 fa fa-bullseye fa-5x mr2 blue"></i>
-        <div class="flex-auto">
-          <h3 class="mb0 mt1 caps">
-            {{ ctrl.users[ctrl.user.data.username].displayName }}
-          </h3>
-          <p class="h1 mb0">We've Got {{ctrl.tasks.length}} Tasks</p>
-        </div>
-      </header>
-
-      <div class="md-col-8 mx-auto rounded tasks-list mb4">
-        <div class="flex flex-center py1"
-          ng-class="{ 'border-bottom': !$last }"
-          ng-repeat="task in ctrl.tasks">
-          <i class="fa px3 py2"
-            ng-class="{
-              'fa-square-o': !task.done,
-              'fa-check-square': task.done
-            }"></i>
-          <div class="flex-auto">
-            <p class="m0 h6 gray">
-              {{ ctrl.users[task.owner].displayName || 'Owner not specified' }}
-            </p>
-            <p class="m0">{{task.description}}</p>
-          </div>
-
-          <a ng-show="task.can.edit"
-            ui-sref="tasks.details({_id: task._id})">
-            <i class="fa fa-pencil-square px3 py2 gray"></i>
-          </a>
-        </div>
-      </div>
-
-    </div>
-    `;
 
   private tasks;
   private users;
@@ -90,8 +52,9 @@ export class TaskListComponent {
     this.tasksActions.addTask(task);
     this.router.goToTaskList();  
   }
-  
+
   private goToAddTask() {
     this.router.goToAddTask.bind(this.router);
   }
 };
+
