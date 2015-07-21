@@ -124,10 +124,15 @@ gulp.task('ts-compile', function () {
     .pipe(gulp.dest(destinationFolder));
 });
 
+gulp.task('html', function () {
+  return gulp.src('client/app/**/*.html')
+    .pipe(gulp.dest(destinationFolder));
+});
+
 gulp.task('watch', ['clean', 'build'], function () {
   gulp.watch(tsClientFiles, ['build']);
 });
 
-gulp.task('build', ['ts-lint', 'ts-compile']);
+gulp.task('build', ['ts-lint', 'ts-compile', 'html']);
 
 gulp.task('default', ['build']);
